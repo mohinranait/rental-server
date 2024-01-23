@@ -1,5 +1,6 @@
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
 const cookieParser = require('cookie-parser')
 const { port } = require('./services/secretEnv');
 const connectMongoDb = require('./config/db');
@@ -19,7 +20,8 @@ app.use(cors({
     credentials: true,
 }));
 app.use(express.json())
-app.use(express.static('public'))
+// app.use('/images', express.static('public/images'));
+app.use('/images', express.static(path.join(__dirname, 'public/images')));
 app.use(cookieParser())
 
 

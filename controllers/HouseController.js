@@ -56,7 +56,10 @@ const getSingleHouse = async(req, res) => {
     try {
         const id = req.params?.id;
        
-        const house = await House.findById(id);
+        const house = await House.findById(id).populate({
+            path:'owner',
+            select:'-password'
+        });
         res.send({
             success:true,
             house
