@@ -21,7 +21,7 @@ const isAuth = async (req, res, next) => {
             id: decoded?.id,
             email: decoded?.email,
         }
-        console.log(decoded) // bar
+       
         next();
     });
 

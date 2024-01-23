@@ -10,14 +10,23 @@ connectMongoDb()
 
 // import requires routes files
 const userRoute = require('./routes/userRoutes');
+const houseRoute = require('./routes/houseRoutes');
+const uploadImageRoute = require('./routes/uploadImages');
 
 // Middleware
-app.use(cors());
+app.use(cors({
+    origin: ['http://localhost:5173','https://rant-house-project.web.app'],
+    credentials: true,
+}));
 app.use(express.json())
+app.use(express.static('public'))
 app.use(cookieParser())
 
 
 app.use('/api/v1', userRoute);
+app.use('/api/v1', houseRoute);
+app.use('/api/v1', uploadImageRoute);
+
 
 // home route
 app.get('/', (req, res) => {

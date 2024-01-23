@@ -39,6 +39,7 @@ const loginUser = async (req, res) => {
             })
         }
 
+        delete user?.password;
         const token = jwt.sign({ id: user?._id, email: user?.email }, jwtSecret, {expiresIn:'1h'});
 
         res.cookie("token", token, {
@@ -46,11 +47,11 @@ const loginUser = async (req, res) => {
             secure: true,
             sameSite:  'none',
         })
-
+        const userInfo = await User.findById({_id: user?._id}).select('-password');
         res.send({
             success: true,
             message:"Login successfull",
-            user,
+            user:userInfo,
         })
     } catch (error) {
         res.status(500).send({
@@ -84,6 +85,48 @@ const findUsreById = async (req, res) => {
         })
 
     } catch (error) {
+        res.status(500).send({
+            success:false,
+            message: error.message,
+        })
+    }
+}
+
+const findAuthUser = async (req, res) => {
+    try {
+        const id = req.user?.id;
+       
+        const user = await User.findById(id).select('-password');
+        if(!user){
+            return res.send({
+                message: "Notfound",
+                success:false,
+            })
+        }
+        res.send({
+            user,
+            success:true,
+        })
+
+    } catch (error) {
+        res.status(500).send({
+            success:false,
+            message: error.message,
+        })
+    }
+}
+
+
+// logout user
+const logOutUser = async (req, res)=> {
+    try {
+        res.clearCookie('token', {
+            maxAge: 0,
+            secure: process.env.NODE_ENV === 'production',
+            sameSite: process.env.NODE_ENV === 'production' ? 'none' : 'strict',
+        })
+        .send({ success: true })
+    } catch (error) {
         
     }
 }
@@ -92,5 +135,7 @@ const findUsreById = async (req, res) => {
 module.exports = {
     registerUser,
     loginUser,
-    findUsreById
+    findUsreById,
+    findAuthUser,
+    logOutUser
 }
