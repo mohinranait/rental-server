@@ -24,8 +24,7 @@ const bookingSchema = new Schema ({
         default:0
     },
     message: {
-        type: Number,
-        default:0
+        type: String,
     },
     startMonth: {
         type: String,
@@ -68,6 +67,11 @@ const bookingSchema = new Schema ({
    
     extraFeatures: {
         type: Array,
+    },
+   
+    houseOwner: {
+        type: Types.ObjectId,
+        ref: "User",
     },
 
    

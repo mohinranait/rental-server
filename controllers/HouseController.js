@@ -114,6 +114,41 @@ const updateHouse = async (req, res) => {
     }
 }
 
+// Delete house
+const deleteHouseMethod = async (req, res) => {
+    const userId = req.query?.userId;
+    const tokenId = req.user?.id;
+    if(userId !== tokenId){
+        return res.status(401).send({
+            message:"Unauthorize",
+            success:false,
+        })
+    }
+
+    const id = req.params?.id;
+
+    try {
+        const house = await House.findByIdAndDelete(id)
+
+        if(!house){
+            return res.send({
+                message:"Notfound",
+                success:false,
+            })
+        }
+    
+        res.send({
+            message:"success",
+            success:true,
+        })
+    } catch (error) {
+        return res.send({
+            message:error.message,
+            success:false,
+        })
+    }
+}
+
 // get all houses
 const getAllHouses = async (req, res) => {
     try {
@@ -136,5 +171,6 @@ module.exports = {
     getOwnerHouse,
     getSingleHouse,
     updateHouse,
-    getAllHouses
+    getAllHouses,
+    deleteHouseMethod
 }

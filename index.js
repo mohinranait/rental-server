@@ -13,6 +13,7 @@ connectMongoDb()
 const userRoute = require('./routes/userRoutes');
 const houseRoute = require('./routes/houseRoutes');
 const uploadImageRoute = require('./routes/uploadImages');
+const bookingRoute = require('./routes/bookingRoute');
 
 // Middleware
 app.use(cors({
@@ -28,6 +29,7 @@ app.use(cookieParser())
 app.use('/api/v1', userRoute);
 app.use('/api/v1', houseRoute);
 app.use('/api/v1', uploadImageRoute);
+app.use('/api/v1', bookingRoute);
 
 
 // home route
